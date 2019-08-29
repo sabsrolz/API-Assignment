@@ -13,7 +13,19 @@
     />
   </head>
   <body>
-    <div id="image_div"></div>
+    <div class="container">
+      <h1>Restaurant Search</h1>
+      <div id="restaurants-view"></div>
+
+      <form id="city-form">
+        <label for="city-form">Add a city!</label>
+        <input type="text" id="city-input" />
+        <br />
+        <input id="add-city" type="submit" value="Add a city!" />
+      </form>
+
+      <div id="cities-view"></div>
+    </div>
 
     <script src="assets/api.js"></script>
   </body>
