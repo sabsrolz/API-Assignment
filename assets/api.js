@@ -1,5 +1,6 @@
 $(document).ready(function() {});
 let bestRated = [];
+
 $("#best-rated").hide();
 $("#cuisine-search").hide();
 function displayRestaurants() {
@@ -41,14 +42,22 @@ function displayRestaurants() {
 }
 
 $("#add-city").on("click", function(event) {
+  event.preventDefault();
   $("#best-rated").show();
   $("#cuisine-search").show();
-  event.preventDefault();
 
   displayRestaurants();
 });
-//displayRestaurants();
 
-$("#best-rated").on("click", function(event) {
-  $("#rate-display").html(bestRated);
+$("#best-rated").on("click", function click_rated(event) {
+  event.preventDefault();
+  for (optionIndex = 0; optionIndex < bestRated.length; optionIndex++) {
+    let res_button = $(
+      `<button id = res_button>${bestRated[optionIndex]}</button></br>`
+    );
+    $("#rate-display").append(res_button);
+  }
+  //console.log(bestRated);
+  //$("#rate-display").html(bestRated);
 });
+//displayRestaurants();
