@@ -1,5 +1,7 @@
 $(document).ready(function() {});
-
+let bestRated = [];
+$("#best-rated").hide();
+$("#cuisine-search").hide();
 function displayRestaurants() {
   let city = $("#city-input")
     .val()
@@ -30,15 +32,23 @@ function displayRestaurants() {
     }).then(function(response) {
       let best_rated = response.best_rated_restaurant;
       console.log(best_rated);
-      let res_name = best_rated[0].restaurant.name;
-      console.log(res_name);
+      for (let x = 0; x < best_rated.length; x++) {
+        res_name = best_rated[x].restaurant.name;
+        bestRated.push(res_name);
+      }
     });
   });
 }
 
 $("#add-city").on("click", function(event) {
+  $("#best-rated").show();
+  $("#cuisine-search").show();
   event.preventDefault();
 
   displayRestaurants();
 });
 //displayRestaurants();
+
+$("#best-rated").on("click", function(event) {
+  $("#rate-display").html(bestRated);
+});
