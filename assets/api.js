@@ -92,18 +92,34 @@ $(document).ready(function() {
             // console.log(menu_url);
             // console.log(phone);
             // console.log(photo_url);
+
+            let menu_url = restaurant_data.menu_url;
+            let photo_url = restaurant_data.photos[0].photo.url;
             let res_data = {
-              reviews: restaurant_data.all_reviews.reviews,
               location: restaurant_data.location.address,
-              menu_url: restaurant_data.menu_url,
-              phone: restaurant_data.phone_numbers,
-              photo_url: restaurant_data.photos[0].photo.url
+              phone: restaurant_data.phone_numbers
             };
             for (var property in res_data) {
-              let res_section = `<div>${res_data[property]}</div>`;
-              $("#selected-rated").append(res_section);
-              console.log(res_data[property]);
+              let res_sec = `<div>${res_data[property]}</div>`;
+              $("#selected-rated").append(res_sec);
             }
+
+            let reviews = restaurant_data.all_reviews.reviews;
+            console.log(reviews);
+            for (
+              let reviewIndex = 0;
+              reviewIndex < reviews.length;
+              reviewIndex++
+            ) {
+              let review_sec = `<p>${reviews[reviewIndex].review.review_text}</p>`;
+              $("#review-section").append(review_sec);
+            }
+
+            let image_sec = `<img src = "${photo_url}">`;
+            $("#image-section").replaceWith(image_sec);
+
+            let menu_sec = `<a href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
+            $("#menu-section").html(menu_sec);
           });
         });
       });
