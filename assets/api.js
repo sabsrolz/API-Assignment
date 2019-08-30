@@ -68,6 +68,7 @@ $(document).ready(function() {
         }
 
         $(".restaurant").on("click", function(event) {
+          $("#restaurants-view").append($(this));
           //event.preventDefault();
           //$("#rate-display").text($(this).attr("name"));
           let res_name = $(this).attr("name");
