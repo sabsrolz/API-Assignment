@@ -81,16 +81,29 @@ $(document).ready(function() {
               Accept: "application/json"
             }
           }).then(function(restaurant_data) {
-            let reviews = restaurant_data.all_reviews.reviews;
-            let location = restaurant_data.location.address;
-            let menu_url = restaurant_data.menu_url;
-            let phone = restaurant_data.offers.phone_numbers;
-            let photo_url = restaurant_data.photos[0].photo.url;
-            console.log(reviews);
-            console.log(location);
-            console.log(menu_url);
-            console.log(phone);
-            console.log(photo_url);
+            console.log(restaurant_data);
+            // let reviews = restaurant_data.all_reviews.reviews;
+            // let location = restaurant_data.location.address;
+            // let menu_url = restaurant_data.menu_url;
+            // let phone = restaurant_data.offers.phone_numbers;
+            // let photo_url = restaurant_data.photos[0].photo.url;
+            // console.log(reviews);
+            // console.log(location);
+            // console.log(menu_url);
+            // console.log(phone);
+            // console.log(photo_url);
+            let res_data = {
+              reviews: restaurant_data.all_reviews.reviews,
+              location: restaurant_data.location.address,
+              menu_url: restaurant_data.menu_url,
+              phone: restaurant_data.phone_numbers,
+              photo_url: restaurant_data.photos[0].photo.url
+            };
+            for (var property in res_data) {
+              let res_section = `<div>${res_data[property]}</div>`;
+              $("#selected-rated").append(res_section);
+              console.log(res_data[property]);
+            }
           });
         });
       });
