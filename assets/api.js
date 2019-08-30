@@ -58,10 +58,10 @@ $(document).ready(function() {
             `<button id = res_button${optionIndex} class= "restaurant">${bestRated[optionIndex]}</button></br>`
           );
 
-          let res_name = res_button.text();
-          let res_id = bestId[optionIndex];
-          res_button.attr("name", res_name);
-          res_button.attr("res-id", res_id);
+          // let res_name = res_button.text();
+          // let res_id = bestId[optionIndex];
+          res_button.attr("name", res_button.text());
+          res_button.attr("res-id", bestId[optionIndex]);
           $("#rate-display").append(res_button);
           // console.log(res_button.attr("name"));
           // console.log(res_button.attr("res-id"));
@@ -70,9 +70,28 @@ $(document).ready(function() {
         $(".restaurant").on("click", function(event) {
           //event.preventDefault();
           //$("#rate-display").text($(this).attr("name"));
-          console.log($(this).attr("name"));
-          console.log($(this).attr("res-id"));
-          $("#rate-display").replaceWith("this restaurant was selected");
+          let res_name = $(this).attr("name");
+          let res_id = $(this).attr("res-id");
+
+          $.ajax({
+            url: `https://developers.zomato.com/api/v2.1/restaurant?res_id=${res_id}`,
+            method: "GET",
+            headers: {
+              "user-key": key,
+              Accept: "application/json"
+            }
+          }).then(function(restaurant_data) {
+            let reviews = restaurant_data.all_reviews.reviews;
+            let location = restaurant_data.location.address;
+            let menu_url = restaurant_data.menu_url;
+            let phone = restaurant_data.offers.phone_numbers;
+            let photo_url = restaurant_data.photos[0].photo.url;
+            console.log(reviews);
+            console.log(location);
+            console.log(menu_url);
+            console.log(phone);
+            console.log(photo_url);
+          });
         });
       });
     });
