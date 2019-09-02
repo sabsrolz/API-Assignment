@@ -6,11 +6,14 @@ $(document).ready(function() {
   // let res_id;
   let best_rated;
   const key = "e68dd11c5f272a6460046d68e988be4d";
-  $("#recently-viewed").hide();
+  $("#add-second").hide();
+  //$("#recently-viewed").hide();
   $("#best-rated").hide();
   $("#res-output").hide();
   //$("#cuisine-search").hide();
   function displayRestaurants() {
+    $("#res-output").hide();
+    //$("#rate-display").html("");
     let city = $("#city-input")
       .val()
       .trim();
@@ -49,8 +52,11 @@ $(document).ready(function() {
         }
       });
       $("#best-rated").on("click", function(event) {
-        $("#best-rated").show();
         event.preventDefault();
+        //$("#add-city").hide();
+        $("#add-second").show();
+        $("#best-rated").show();
+
         for (
           let optionIndex = 0;
           optionIndex < bestRated.length;
@@ -70,12 +76,17 @@ $(document).ready(function() {
         }
 
         $(".restaurant").on("click", function(event) {
-          $("#res-output").show();
+          $("#main-section").show();
+          $("#review-section").show();
+          $("#menu-section").show();
+          $("#image-section").show();
+
           $("#image-section").html("");
           $("#review-section").html("");
           //$("#rate-display").hide();
-          $("#recently-viewed").show();
+          //$("#recently-viewed").show();
           $("#recently-viewed").append($(this));
+
           //event.preventDefault();
           //$("#rate-display").text($(this).attr("name"));
           let res_name = $(this).attr("name");
@@ -138,11 +149,31 @@ $(document).ready(function() {
 
   $("#add-city").on("click", function(event) {
     event.preventDefault();
-    $("#recently-viewed").hide();
+    // $("#add-second").hide();
+    bestRated = [];
+    bestId = [];
+    $("#recently-viewed").show();
+    $("#main-section").hide();
+    $("#review-section").hide();
+    $("#menu-section").hide();
+    $("#image-section").hide();
     $("#best-rated").show();
     //$("#cuisine-search").show();
 
     displayRestaurants();
+  });
+
+  $("#add-second").on("click", function(event) {
+    //event.preventDefault();
+    $("#recently-viewed").show();
+    $("#city-input").val("");
+    $("#rate-display").replaceWith("");
+    $("#main-section").hide();
+    $("#review-section").hide();
+    $("#menu-section").hide();
+    $("#image-section").hide();
+    $("#best-rated").hide();
+    $("#add-second").hide();
   });
 
   //displayRestaurants();
