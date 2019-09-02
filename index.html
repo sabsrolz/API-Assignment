@@ -5,36 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+   
     <link
       rel="stylesheet"
       type="text/css"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+    
   </head>
   <body>
     <div class="container">
       <h1>Restaurant Search</h1>
-      <div id="restaurants-view">Restaurants visited:</div>
+      <div id="recently-viewed"></div>
 
       <form id="city-form">
         <label for="city-form">Add a city!</label>
         <input type="text" id="city-input" />
         <br />
-        <input id="add-city" type="submit" value="Add a city!" />
+        <input id="add-city" class="m-3" type="submit" value="Search" />
         <br />
         <input id="best-rated" type="submit" value="Search by best rated" />
-        <input id="cuisine-search" type="submit" value="Search by cuisine" />
+        <!--<input id="cuisine-search" type="submit" value="Search by cuisine" />-->
       </form>
 
       <div id="rate-display"></div>
 
-      <div id="selected-rated"></div>
-      <div id="review-section"></div>
-      <div id="image-section"></div>
-      <div id="menu-section"></div>
-    </div>
+      <div id="res-ouput">
+        <div id="main-section">
+          <div id="address-section"></div>
+          <div id="telephone-section"></div>
+        </div>
+        <div id = review-section></div>
+        <div id="menu-section"></div></br>
+        <div id="image-section" class = row></div>
+       
+        </div>
+   
+        
 
+<!--<a href="#demo" data-toggle="collapse">Collapsible</a>
+  <div id="demo" class="collapse">
+Reviews:
+</div>-->
+       
+      
+    
+    
     <script src="assets/api.js"></script>
+    
   </body>
 </html>

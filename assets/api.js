@@ -6,8 +6,10 @@ $(document).ready(function() {
   // let res_id;
   let best_rated;
   const key = "e68dd11c5f272a6460046d68e988be4d";
+  $("#recently-viewed").hide();
   $("#best-rated").hide();
-  $("#cuisine-search").hide();
+  $("#res-output").hide();
+  //$("#cuisine-search").hide();
   function displayRestaurants() {
     let city = $("#city-input")
       .val()
@@ -55,7 +57,7 @@ $(document).ready(function() {
           optionIndex++
         ) {
           let res_button = $(
-            `<button id = res_button${optionIndex} class= "restaurant">${bestRated[optionIndex]}</button></br>`
+            `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-light">${bestRated[optionIndex]}</button>`
           );
 
           // let res_name = res_button.text();
@@ -68,7 +70,12 @@ $(document).ready(function() {
         }
 
         $(".restaurant").on("click", function(event) {
-          $("#restaurants-view").append($(this));
+          $("#res-output").show();
+          $("#image-section").html("");
+          $("#review-section").html("");
+          //$("#rate-display").hide();
+          $("#recently-viewed").show();
+          $("#recently-viewed").append($(this));
           //event.preventDefault();
           //$("#rate-display").text($(this).attr("name"));
           let res_name = $(this).attr("name");
@@ -83,28 +90,18 @@ $(document).ready(function() {
             }
           }).then(function(restaurant_data) {
             console.log(restaurant_data);
-            // let reviews = restaurant_data.all_reviews.reviews;
-            // let location = restaurant_data.location.address;
-            // let menu_url = restaurant_data.menu_url;
-            // let phone = restaurant_data.offers.phone_numbers;
-            // let photo_url = restaurant_data.photos[0].photo.url;
-            // console.log(reviews);
-            // console.log(location);
-            // console.log(menu_url);
-            // console.log(phone);
-            // console.log(photo_url);
 
             let menu_url = restaurant_data.menu_url;
-            let photo_url = restaurant_data.photos[0].photo.url;
-            let res_data = {
-              location: restaurant_data.location.address,
-              phone: restaurant_data.phone_numbers
-            };
-            for (var property in res_data) {
-              let res_sec = `<div>${res_data[property]}</div>`;
-              $("#selected-rated").append(res_sec);
-            }
+            // let photo_url = restaurant_data.photos[0].photo.url;
+            let photo_url0 = restaurant_data.photos[0].photo.url;
+            let photo_url1 = restaurant_data.photos[1].photo.url;
+            let photo_url2 = restaurant_data.photos[2].photo.url;
+            let address = restaurant_data.location.address;
+            let phone = restaurant_data.phone_numbers;
 
+            $("#address-section").html(`<p>Address: ${address}</p>`);
+            $("#telephone-section").html(`<p>Phone Number: ${phone}</p>`);
+            //$("#review-section").text("Restaurant Reviews");
             let reviews = restaurant_data.all_reviews.reviews;
             console.log(reviews);
             for (
@@ -112,13 +109,25 @@ $(document).ready(function() {
               reviewIndex < reviews.length;
               reviewIndex++
             ) {
-              let review_sec = `<p>${reviews[reviewIndex].review.review_text}</p>`;
+              let review_sec = `<div>Review ${reviewIndex + 1}: ${
+                reviews[reviewIndex].review.review_text
+              }</div></br>`;
+
               $("#review-section").append(review_sec);
             }
 
-            let image_sec = `<img src = "${photo_url}">`;
-            $("#image-section").replaceWith(image_sec);
+            let image_sec0 = `<img class="img-thumbnail col-md-3" src = "${photo_url0}">`;
+            let image_sec1 = `<img class="img-thumbnail col-md-3" src = "${photo_url1}">`;
+            let image_sec2 = `<img class="img-thumbnail col-md-3" src = "${photo_url2}">`;
+            $("#image-section").append(image_sec0);
+            $("#image-section").append(image_sec1);
+            $("#image-section").append(image_sec2);
+            // for (let imgIndex = 0; imgIndex < 3; imgIndex++) {
+            //   let image_sec = `<img class="img-thumbnail" src = "${"photo_url" +
+            //     imgIndex}">`;
 
+            //   $("#image-section").append(image_sec);
+            // }
             let menu_sec = `<a href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
             $("#menu-section").html(menu_sec);
           });
@@ -129,6 +138,7 @@ $(document).ready(function() {
 
   $("#add-city").on("click", function(event) {
     event.preventDefault();
+    $("#recently-viewed").hide();
     $("#best-rated").show();
     //$("#cuisine-search").show();
 
