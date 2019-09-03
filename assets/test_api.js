@@ -1,11 +1,225 @@
-const key = "e68dd11c5f272a6460046d68e988be4d";
-$.ajax({
-  url: `https://developers.zomato.com/api/v2.1/restaurant?res_id=16736014`,
+// const key = "e68dd11c5f272a6460046d68e988be4d";
+// queryURL =
+//   "https://maps.googleapis.com/maps/api/js?key=AIzaSyDjg64go4oQf2EIm7jy98i8NIIh2sB6rTE&callback=initMap";
+// $.ajax({
+//   url: queryURL,
+//   method: "GET"
+// }).then(function(response) {
+//   console.log(response);
+// });
+
+var settings = {
+  async: true,
+  crossDomain: true,
+  url:
+    "https://google-maps-geocoding.p.rapidapi.com/geocode/json?language=en&latlng=40.714224%2C-73.96145",
   method: "GET",
   headers: {
-    "user-key": key,
-    Accept: "application/json"
+    "x-rapidapi-host": "google-maps-geocoding.p.rapidapi.com",
+    "x-rapidapi-key": "c04ea25392msh10e8fa8f87c46a4p1e4622jsnf4d70b746bed"
   }
-}).then(function(response) {
+};
+
+$.ajax(settings).done(function(response) {
   console.log(response);
+});
+
+$(document).ready(function() {
+  let bestRated = [];
+  let bestId = [];
+  let top_cuisines;
+  //let res_name;
+  // let res_id;
+  let best_rated;
+  const key = "e68dd11c5f272a6460046d68e988be4d";
+  $("#add-second").hide();
+  //$("#recently-viewed").hide();
+  $("#best-rated").hide();
+  $("#res-output").hide();
+  //$("#cuisine-search").hide();
+  function displayRestaurants() {
+    $("#res-output").hide();
+    //$("#rate-display").html("");
+    let city = $("#city-input")
+      .val()
+      .trim();
+    let max_results = 5;
+
+    queryURL = `https://developers.zomato.com/api/v2.1/locations?query=${city}&count=${max_results}`;
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+      headers: {
+        "user-key": key,
+        Accept: "application/json"
+      }
+    }).then(function(response) {
+      let location_type = response.location_suggestions[0].entity_type;
+      let city_id = response.location_suggestions[0].city_id;
+      console.log(location_type);
+      console.log(city_id);
+      $.ajax({
+        url: `https://developers.zomato.com/api/v2.1/location_details?entity_id=${city_id}&entity_type=${location_type}`,
+        method: "GET",
+        headers: {
+          "user-key": key,
+          Accept: "application/json"
+        }
+      }).then(function(response) {
+        top_cuisines = response.top_cuisines;
+        best_rated = response.best_rated_restaurant;
+        console.log(best_rated);
+        for (let x = 0; x < best_rated.length; x++) {
+          res_name = best_rated[x].restaurant.name;
+          res_id = best_rated[x].restaurant.id;
+          console.log(res_id);
+          bestRated.push(res_name);
+          bestId.push(res_id);
+          console.log(bestId);
+        }
+        for (
+          let cuisineIndex = 0;
+          cuisineIndex < top_cuisines.length;
+          cuisineIndex++
+        ) {
+          $.ajax({
+            url: `https://developers.zomato.com/api/v2.1/search?entity_id=${city_id}&entity_type=city&q=${top_cuisines[cuisineIndex]}`,
+            method: "GET",
+            headers: {
+              "user-key": key,
+              Accept: "application/json"
+            }
+          }).then(function(response) {
+            outputCuisine = response;
+          });
+        }
+
+        $("#best-rated").on("click", function(event) {
+          event.preventDefault();
+          //$("#add-city").hide();
+
+          $("#best-rated").show();
+
+          for (
+            let optionIndex = 0;
+            optionIndex < bestRated.length;
+            optionIndex++
+          ) {
+            let res_button = $(
+              `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-light">${bestRated[optionIndex]}</button>`
+            );
+
+            // let res_name = res_button.text();
+            // let res_id = bestId[optionIndex];
+            res_button.attr("name", res_button.text());
+            res_button.attr("res-id", bestId[optionIndex]);
+            $("#rate-display").append(res_button);
+            // console.log(res_button.attr("name"));
+            // console.log(res_button.attr("res-id"));
+          }
+
+          $(".restaurant").on("click", function(event) {
+            $("#add-second").show();
+            $("#main-section").show();
+            $("#review-section").show();
+            $("#menu-section").show();
+            $("#image-section").show();
+
+            $("#image-section").html("");
+            $("#review-section").html("");
+            //$("#rate-display").hide();
+            //$("#recently-viewed").show();
+            $("#recently-viewed").append($(this));
+
+            //event.preventDefault();
+            //$("#rate-display").text($(this).attr("name"));
+            let res_name = $(this).attr("name");
+            let res_id = $(this).attr("res-id");
+
+            $.ajax({
+              url: `https://developers.zomato.com/api/v2.1/restaurant?res_id=${res_id}`,
+              method: "GET",
+              headers: {
+                "user-key": key,
+                Accept: "application/json"
+              }
+            }).then(function(restaurant_data) {
+              console.log(restaurant_data);
+
+              let menu_url = restaurant_data.menu_url;
+              // let photo_url = restaurant_data.photos[0].photo.url;
+              let photo_url0 = restaurant_data.photos[0].photo.url;
+              let photo_url1 = restaurant_data.photos[1].photo.url;
+              let photo_url2 = restaurant_data.photos[2].photo.url;
+              let address = restaurant_data.location.address;
+              let phone = restaurant_data.phone_numbers;
+
+              $("#address-section").html(`<p>Address: ${address}</p>`);
+              $("#telephone-section").html(`<p>Phone Number: ${phone}</p>`);
+              //$("#review-section").text("Restaurant Reviews");
+              let reviews = restaurant_data.all_reviews.reviews;
+              console.log(reviews);
+              for (
+                let reviewIndex = 0;
+                reviewIndex < reviews.length;
+                reviewIndex++
+              ) {
+                let review_sec = `<div>Review ${reviewIndex + 1}: ${
+                  reviews[reviewIndex].review.review_text
+                }</div></br>`;
+
+                $("#review-section").append(review_sec);
+              }
+
+              let image_sec0 = `<img class="img-thumbnail col-md-3" src = "${photo_url0}">`;
+              let image_sec1 = `<img class="img-thumbnail col-md-3" src = "${photo_url1}">`;
+              let image_sec2 = `<img class="img-thumbnail col-md-3" src = "${photo_url2}">`;
+              $("#image-section").append(image_sec0);
+              $("#image-section").append(image_sec1);
+              $("#image-section").append(image_sec2);
+              // for (let imgIndex = 0; imgIndex < 3; imgIndex++) {
+              //   let image_sec = `<img class="img-thumbnail" src = "${"photo_url" +
+              //     imgIndex}">`;
+
+              //   $("#image-section").append(image_sec);
+              // }
+              let menu_sec = `<a href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
+              $("#menu-section").html(menu_sec);
+            });
+          });
+        });
+      });
+    });
+  }
+
+  $("#add-city").on("click", function(event) {
+    event.preventDefault();
+    // $("#add-second").hide();
+    bestRated = [];
+    bestId = [];
+    $("#recently-viewed").show();
+    $("#main-section").hide();
+    $("#review-section").hide();
+    $("#menu-section").hide();
+    $("#image-section").hide();
+    $("#best-rated").show();
+    //$("#cuisine-search").show();
+
+    displayRestaurants();
+  });
+
+  $("#add-second").on("click", function(event) {
+    //event.preventDefault();
+    $("#recently-viewed").show();
+    $("#city-input").val("");
+    $("#rate-display").replaceWith("");
+    $("#main-section").hide();
+    $("#review-section").hide();
+    $("#menu-section").hide();
+    $("#image-section").hide();
+    $("#best-rated").hide();
+    $("#add-second").hide();
+  });
+
+  //displayRestaurants();
 });
