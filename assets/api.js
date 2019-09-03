@@ -5,6 +5,7 @@ $(document).ready(function() {
   let reviews = [];
   const key = "e68dd11c5f272a6460046d68e988be4d";
   $("#add-second").hide();
+  //$("#loading").hide();
   //$("#recently-viewed").hide();
   $("#best-rated").hide();
   $("#res-output").hide();
@@ -53,8 +54,10 @@ $(document).ready(function() {
         $("#best-rated-section").replaceWith(
           `<input id="best-rated" type="submit" class="m-2 btn btn-info" value="Search by best rated" />`
         );
+        $("#loading").hide();
         $("#best-rated").on("click", function(event) {
           event.preventDefault();
+
           //$("#add-city").hide();
 
           $("#best-rated").show();
@@ -188,6 +191,9 @@ $(document).ready(function() {
 
   $("#add-city").on("click", function(event) {
     event.preventDefault();
+    $("#loading-section").replaceWith(
+      `<img class = "col-md-2 ml-2" id= "loading" src = "assets/gifloader.gif">`
+    );
     // $("#add-second").hide();
     $("#recently-viewed").show();
     $("#main-section").hide();
