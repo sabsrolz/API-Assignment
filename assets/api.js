@@ -2,11 +2,14 @@ $(document).ready(function() {
   let bestRated = [];
   let bestId = [];
   let best_rated;
+  let reviews = [];
   const key = "e68dd11c5f272a6460046d68e988be4d";
   $("#add-second").hide();
   //$("#recently-viewed").hide();
   $("#best-rated").hide();
   $("#res-output").hide();
+  $("#read-reviews").hide();
+  $("#hide-reviews").hide();
   //$("#cuisine-search").hide();
   function displayRestaurants() {
     $("#res-output").hide();
@@ -73,6 +76,7 @@ $(document).ready(function() {
           }
 
           $(".restaurant").on("click", function(event) {
+            reviews = [];
             $("#best-rated").hide();
             $("#add-second").show();
             $("#main-section").show();
@@ -107,8 +111,9 @@ $(document).ready(function() {
               let photo_url1 = restaurant_data.photos[1].photo.url;
               let photo_url2 = restaurant_data.photos[2].photo.url;
               let address = restaurant_data.location.address;
+              let lat = restaurant_data.location.latitude;
+              let lon = restaurant_data.location.longitude;
               let phone = restaurant_data.phone_numbers;
-              //console.log(address);
               $("#address-section").html(`<p>Address: ${address}</p>`);
               let map_url = `<iframe
               width="200"
@@ -116,24 +121,41 @@ $(document).ready(function() {
               frameborder="0"
               style="border:0"
               src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDjg64go4oQf2EIm7jy98i8NIIh2sB6rTE
-              &q=${address}" allowfullscreen></iframe>`;
+              &q=${address}&center=${lat},${lon}" allowfullscreen></iframe>`;
               $("#map").html(map_url);
 
               $("#telephone-section").html(`<p>Phone Number: ${phone}</p>`);
               //$("#review-section").text("Restaurant Reviews");
-              let reviews = restaurant_data.all_reviews.reviews;
-              console.log(reviews);
-              for (
-                let reviewIndex = 0;
-                reviewIndex < reviews.length;
-                reviewIndex++
-              ) {
-                let review_sec = `<div>Review ${reviewIndex + 1}: ${
-                  reviews[reviewIndex].review.review_text
-                }</div></br>`;
+              // $("#review-body").append(
+              //   `<button id = "read-reviews" class = col-md-2>Show Reviews</button></br>`
+              // );
+              // $("#review-body").append(
+              //   `<button id = "hide-reviews" class = col-md-2>Hide Reviews</button></br>`
+              // );
 
-                $("#review-section").append(review_sec);
-              }
+              $("#read-reviews").show();
+              $("#read-reviews").on("click", function(event) {
+                $("#review-section").html("");
+                $("#review-section").show();
+                //$("#read-reviews").show();
+                $("#hide-reviews").show();
+                reviews = restaurant_data.all_reviews.reviews;
+
+                for (
+                  let reviewIndex = 0;
+                  reviewIndex < reviews.length;
+                  reviewIndex++
+                ) {
+                  let review_sec = `<div>Review ${reviewIndex + 1}: ${
+                    reviews[reviewIndex].review.review_text
+                  }</div></br>`;
+                  $("#review-section").append(review_sec);
+                }
+
+                $("#hide-reviews").on("click", function(event) {
+                  $("#review-section").hide();
+                });
+              });
 
               let image_sec0 = `<img class="img-thumbnail col-md-3" src = "${photo_url0}">`;
               let image_sec1 = `<img class="img-thumbnail col-md-3" src = "${photo_url1}">`;
