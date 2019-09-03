@@ -18,19 +18,24 @@
     
     
   </head>
-  <body>
+  <body background = "assets/brick_background.jpg">
     <div class="container">
-      <h1>Restaurant Search</h1>
+      <h1 class = "text-light p-2 m-3 text-center" style = background-color:darkslategray>Restaurant Search</h1>
       <div id="recently-viewed"></div>
 
       <form id="city-form">
-        <label for="city-form">Add a city!</label>
-        <input type="text" id="city-input" />
+        
+        
+        <input class="m-2 form-control col-md-3" type="text" id="city-input" placeholder="Search for city">
+     
         <br />
-        <input id="add-city" class="m-3" type="submit" value="Search" />
-        <input id="add-second" class="m-3" type="submit" value="Search for another city" />
+     
+        <input id="add-city" class="m-2 btn btn-info" type="submit" value="Search" />
+        <input id="add-second" class="m-2 btn btn-info" type="submit" value="Search for another city" />
         <br />
-        <input id="best-rated" type="submit" value="Search by best rated" />
+        <div id = "best-rated-section">
+       <!--<input id="best-rated" type="submit" value="Search by best rated" />--> 
+      </div>
         <!--<input id="cuisine-search" type="submit" value="Search by cuisine" />-->
       </form>
 
@@ -43,9 +48,9 @@
           <div id="telephone-section"></div>
         </div>
         <div id = review-body class = row>
-          <button id = "read-reviews" class = col-md-2>Show Reviews</button></br>
-          <button id = "hide-reviews" class = col-md-2>Hide Reviews</button></br>
-          <div id = review-section></div>
+          <button id = "read-reviews" class = "btn btn-light col-md-2 m-2">Show Reviews</button></br>
+          <button id = "hide-reviews" class = "btn btn-light col-md-2 m-2">Hide Reviews</button></br>
+          <div id = review-section style = background-color:wheat opacity = "0.5"></div>
         </div></br>
         <!-- <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
         <div id="demo" class="collapse">

@@ -50,12 +50,15 @@ $(document).ready(function() {
           bestId.push(res_id);
           console.log(bestId);
         }
-
+        $("#best-rated-section").replaceWith(
+          `<input id="best-rated" type="submit" class="m-2 btn btn-info" value="Search by best rated" />`
+        );
         $("#best-rated").on("click", function(event) {
           event.preventDefault();
           //$("#add-city").hide();
 
           $("#best-rated").show();
+          $("#rate-display").show();
 
           for (
             let optionIndex = 0;
@@ -63,7 +66,7 @@ $(document).ready(function() {
             optionIndex++
           ) {
             let res_button = $(
-              `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-light">${bestRated[optionIndex]}</button>`
+              `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-dark">${bestRated[optionIndex]}</button>`
             );
 
             // let res_name = res_button.text();
@@ -114,8 +117,11 @@ $(document).ready(function() {
               let lat = restaurant_data.location.latitude;
               let lon = restaurant_data.location.longitude;
               let phone = restaurant_data.phone_numbers;
-              $("#address-section").html(`<p>Address: ${address}</p>`);
+              $("#address-section").html(
+                `<p class = "font-weight-bold m-2">Address: ${address}</p>`
+              );
               let map_url = `<iframe
+              class = "m-2"
               width="200"
               height="200"
               frameborder="0"
@@ -124,7 +130,9 @@ $(document).ready(function() {
               &q=${address}&center=${lat},${lon}" allowfullscreen></iframe>`;
               $("#map").html(map_url);
 
-              $("#telephone-section").html(`<p>Phone Number: ${phone}</p>`);
+              $("#telephone-section").html(
+                `<p class = "font-weight-bold m-2">Phone Number: ${phone}</p>`
+              );
               //$("#review-section").text("Restaurant Reviews");
               // $("#review-body").append(
               //   `<button id = "read-reviews" class = col-md-2>Show Reviews</button></br>`
@@ -169,7 +177,7 @@ $(document).ready(function() {
 
               //   $("#image-section").append(image_sec);
               // }
-              let menu_sec = `<a href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
+              let menu_sec = `<a class = "font-weight-bold" href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
               $("#menu-section").html(menu_sec);
             });
           });
@@ -181,8 +189,6 @@ $(document).ready(function() {
   $("#add-city").on("click", function(event) {
     event.preventDefault();
     // $("#add-second").hide();
-    bestRated = [];
-    bestId = [];
     $("#recently-viewed").show();
     $("#main-section").hide();
     $("#review-section").hide();
