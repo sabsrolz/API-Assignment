@@ -1,41 +1,16 @@
-// const key = "e68dd11c5f272a6460046d68e988be4d";
-// queryURL =
-//   "https://maps.googleapis.com/maps/api/js?key=AIzaSyDjg64go4oQf2EIm7jy98i8NIIh2sB6rTE&callback=initMap";
-// $.ajax({
-//   url: queryURL,
-//   method: "GET"
-// }).then(function(response) {
-//   console.log(response);
-// });
-
-var settings = {
-  async: true,
-  crossDomain: true,
-  url:
-    "https://google-maps-geocoding.p.rapidapi.com/geocode/json?language=en&latlng=40.714224%2C-73.96145",
-  method: "GET",
-  headers: {
-    "x-rapidapi-host": "google-maps-geocoding.p.rapidapi.com",
-    "x-rapidapi-key": "c04ea25392msh10e8fa8f87c46a4p1e4622jsnf4d70b746bed"
-  }
-};
-
-$.ajax(settings).done(function(response) {
-  console.log(response);
-});
-
 $(document).ready(function() {
   let bestRated = [];
   let bestId = [];
-  let top_cuisines;
-  //let res_name;
-  // let res_id;
   let best_rated;
+  let reviews = [];
   const key = "e68dd11c5f272a6460046d68e988be4d";
   $("#add-second").hide();
+  //$("#loading").hide();
   //$("#recently-viewed").hide();
   $("#best-rated").hide();
   $("#res-output").hide();
+  $("#read-reviews").hide();
+  $("#hide-reviews").hide();
   //$("#cuisine-search").hide();
   function displayRestaurants() {
     $("#res-output").hide();
@@ -66,7 +41,6 @@ $(document).ready(function() {
           Accept: "application/json"
         }
       }).then(function(response) {
-        top_cuisines = response.top_cuisines;
         best_rated = response.best_rated_restaurant;
         console.log(best_rated);
         for (let x = 0; x < best_rated.length; x++) {
@@ -77,28 +51,17 @@ $(document).ready(function() {
           bestId.push(res_id);
           console.log(bestId);
         }
-        for (
-          let cuisineIndex = 0;
-          cuisineIndex < top_cuisines.length;
-          cuisineIndex++
-        ) {
-          $.ajax({
-            url: `https://developers.zomato.com/api/v2.1/search?entity_id=${city_id}&entity_type=city&q=${top_cuisines[cuisineIndex]}`,
-            method: "GET",
-            headers: {
-              "user-key": key,
-              Accept: "application/json"
-            }
-          }).then(function(response) {
-            outputCuisine = response;
-          });
-        }
-
+        $("#best-rated-section").replaceWith(
+          `<input id="best-rated" type="submit" class="m-2 btn btn-info" value="Search by best rated" />`
+        );
+        $("#loading").hide();
         $("#best-rated").on("click", function(event) {
           event.preventDefault();
+
           //$("#add-city").hide();
 
           $("#best-rated").show();
+          $("#rate-display").show();
 
           for (
             let optionIndex = 0;
@@ -106,7 +69,7 @@ $(document).ready(function() {
             optionIndex++
           ) {
             let res_button = $(
-              `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-light">${bestRated[optionIndex]}</button>`
+              `<button id = res_button${optionIndex} class= "restaurant m-2 btn btn-dark">${bestRated[optionIndex]}</button>`
             );
 
             // let res_name = res_button.text();
@@ -119,6 +82,8 @@ $(document).ready(function() {
           }
 
           $(".restaurant").on("click", function(event) {
+            reviews = [];
+            $("#best-rated").hide();
             $("#add-second").show();
             $("#main-section").show();
             $("#review-section").show();
@@ -152,24 +117,56 @@ $(document).ready(function() {
               let photo_url1 = restaurant_data.photos[1].photo.url;
               let photo_url2 = restaurant_data.photos[2].photo.url;
               let address = restaurant_data.location.address;
+              let lat = restaurant_data.location.latitude;
+              let lon = restaurant_data.location.longitude;
               let phone = restaurant_data.phone_numbers;
+              $("#address-section").html(
+                `<p class = "font-weight-bold m-2">Address: ${address}</p>`
+              );
+              let map_url = `<iframe
+              class = "m-2"
+              width="200"
+              height="200"
+              frameborder="0"
+              style="border:0"
+              src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDjg64go4oQf2EIm7jy98i8NIIh2sB6rTE
+              &q=${address}&center=${lat},${lon}" allowfullscreen></iframe>`;
+              $("#map").html(map_url);
 
-              $("#address-section").html(`<p>Address: ${address}</p>`);
-              $("#telephone-section").html(`<p>Phone Number: ${phone}</p>`);
+              $("#telephone-section").html(
+                `<p class = "font-weight-bold m-2">Phone Number: ${phone}</p>`
+              );
               //$("#review-section").text("Restaurant Reviews");
-              let reviews = restaurant_data.all_reviews.reviews;
-              console.log(reviews);
-              for (
-                let reviewIndex = 0;
-                reviewIndex < reviews.length;
-                reviewIndex++
-              ) {
-                let review_sec = `<div>Review ${reviewIndex + 1}: ${
-                  reviews[reviewIndex].review.review_text
-                }</div></br>`;
+              // $("#review-body").append(
+              //   `<button id = "read-reviews" class = col-md-2>Show Reviews</button></br>`
+              // );
+              // $("#review-body").append(
+              //   `<button id = "hide-reviews" class = col-md-2>Hide Reviews</button></br>`
+              // );
 
-                $("#review-section").append(review_sec);
-              }
+              $("#read-reviews").show();
+              $("#read-reviews").on("click", function(event) {
+                $("#review-section").html("");
+                $("#review-section").show();
+                //$("#read-reviews").show();
+                $("#hide-reviews").show();
+                reviews = restaurant_data.all_reviews.reviews;
+
+                for (
+                  let reviewIndex = 0;
+                  reviewIndex < reviews.length;
+                  reviewIndex++
+                ) {
+                  let review_sec = `<div>Review ${reviewIndex + 1}: ${
+                    reviews[reviewIndex].review.review_text
+                  }</div></br>`;
+                  $("#review-section").append(review_sec);
+                }
+
+                $("#hide-reviews").on("click", function(event) {
+                  $("#review-section").hide();
+                });
+              });
 
               let image_sec0 = `<img class="img-thumbnail col-md-3" src = "${photo_url0}">`;
               let image_sec1 = `<img class="img-thumbnail col-md-3" src = "${photo_url1}">`;
@@ -183,7 +180,7 @@ $(document).ready(function() {
 
               //   $("#image-section").append(image_sec);
               // }
-              let menu_sec = `<a href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
+              let menu_sec = `<a class = "font-weight-bold" href = "${menu_url}" target="_blank">Take a look at the menu!</a>`;
               $("#menu-section").html(menu_sec);
             });
           });
@@ -194,9 +191,10 @@ $(document).ready(function() {
 
   $("#add-city").on("click", function(event) {
     event.preventDefault();
-    // $("#add-second").hide();
-    bestRated = [];
-    bestId = [];
+    $("#loading-section").replaceWith(
+      `<img class = "col-md-2 ml-2 img-thumbnail" id= "loading" src = "assets/gifloader.gif">`
+    );
+    // $("#add-second").hide()
     $("#recently-viewed").show();
     $("#main-section").hide();
     $("#review-section").hide();
@@ -209,7 +207,7 @@ $(document).ready(function() {
   });
 
   $("#add-second").on("click", function(event) {
-    //event.preventDefault();
+    event.preventDefault();
     $("#recently-viewed").show();
     $("#city-input").val("");
     $("#rate-display").replaceWith("");

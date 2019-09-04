@@ -13,7 +13,7 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
     
     
@@ -50,16 +50,11 @@
           <div id="telephone-section"></div>
         </div>
         <div id = review-body class = row>
-          <button id = "read-reviews" class = "btn btn-light col-md-2 m-2">Show Reviews</button></br>
-          <button id = "hide-reviews" class = "btn btn-light col-md-2 m-2">Hide Reviews</button></br>
-          <div id = review-section style = background-color:wheat opacity = "0.5"></div>
+          
+        <a data-target="#review-section" class = "btn btn-light" data-toggle="collapse">Show Reviews</a>
+          <div id="review-section" class="collapse"></div>
         </div></br>
-        <!-- <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
-        <div id="demo" class="collapse">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </div> -->
+      
 
         <div id="menu-section"></div></br>
         <div id="image-section" class = row></div>
@@ -68,13 +63,9 @@
    
         
 
-<!--<a href="#demo" data-toggle="collapse">Collapsible</a>
-  <div id="demo" class="collapse">
-Reviews:
-</div>-->
        
       
-    
+ 
 
     <script src="assets/api.js"></script>
    
