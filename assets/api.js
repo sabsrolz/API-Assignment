@@ -18,7 +18,7 @@ $(document).ready(function() {
       .val()
       .trim();
     let max_results = 5;
-    queryURL = `https://developers.zomato.com/api/v2.1/locations?query=${city}&count=${max_results}`;
+    queryURL = `https://cors-anywhere.herokuapp.com/https://developers.zomato.com/api/v2.1/locations?query=${city}&count=${max_results}`;
     //use ajax method to pull data from Zomato API
     $.ajax({
       url: queryURL,
@@ -35,7 +35,7 @@ $(document).ready(function() {
       // console.log(city_id);
       //nested ajax call to pull restaurant list from entity ID outputted by previous API
       $.ajax({
-        url: `https://developers.zomato.com/api/v2.1/location_details?entity_id=${city_id}&entity_type=${location_type}`,
+        url: `https://cors-anywhere.herokuapp.com/https://developers.zomato.com/api/v2.1/location_details?entity_id=${city_id}&entity_type=${location_type}`,
         method: "GET",
         headers: {
           "user-key": key,
@@ -99,7 +99,7 @@ $(document).ready(function() {
             let res_id = $(this).attr("res-id");
             //ajax method that runs query using restaurant ID to output restaurant data when clicked
             $.ajax({
-              url: `https://developers.zomato.com/api/v2.1/restaurant?res_id=${res_id}`,
+              url: `https://cors-anywhere.herokuapp.com/https://developers.zomato.com/api/v2.1/restaurant?res_id=${res_id}`,
               method: "GET",
               headers: {
                 "user-key": key,
